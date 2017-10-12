@@ -5,6 +5,7 @@ import styles from './styles.js';
 import Icon from 'react-native-vector-icons/Entypo';
 
 export class ServerScreen extends React.Component {
+  server=new ParktrisServer();
   constructor(props) {
     super(props);
     this.state = { 
@@ -13,25 +14,21 @@ export class ServerScreen extends React.Component {
       login: null,
       password: null,
       connectionResult: ""
-    };
+    };   
   }
 
   componentDidMount() {
-    AsyncStorage.getItem('@Parktris:serverURL').then((token) => {
+      this.server.loadCredentials();
       this.setState({
-        url: token 
+        url: this.server.getServerURL()
       });
-    });
-    AsyncStorage.getItem('@Parktris:login').then((token) => {
       this.setState({
-        login: token
+        login: this.server.getUser()
       });
-    });
-    AsyncStorage.getItem('@Parktris:password').then((token) => {
       this.setState({
-        password: token
+        password: this.server.getPassword()
       });
-    });
+    
   }
 
   static navigationOptions = {
@@ -45,7 +42,7 @@ export class ServerScreen extends React.Component {
         <Icon.Button name="menu" onPress={() => navigate('DrawerOpen')}/>
         <Text style={styles.title}>Server Settings</Text>
         <Text>Parktris Mobile needs to know which parktris server to use in order to work.</Text>
-        <Text>Server URL: </Text>
+        <Text>Server URL:</Text>
         <TextInput 
           style={styles.input}
           onChangeText={this.changeURL.bind(this)}
@@ -69,36 +66,28 @@ export class ServerScreen extends React.Component {
         onPress={this.checkConnection.bind(this)}
       />
       <Text>{this.state.connectionResult}</Text>
-      
+      <Button
+        title="Home"
+        onPress={() =>
+          navigate('Home')
+        }
+      />
       </View>
     );
   }
-  async changeURL(url){
-    this.setState({url: url});
-    try {
-      await AsyncStorage.setItem('@Parktris:serverURL', url);
-    } catch (error) {
-      console.log("error while saving serverURL: "+error)
-    }
+ 
+  changeURL(url){    
+    this.server.changeURL(url);
   }
-  async changeLogin(login){
-    this.setState({login: login});
-    try {
-      await AsyncStorage.setItem('@Parktris:login', login);
-    } catch (error) {
-      console.log("error while saving login: "+error)
-    }
+  changeLogin(login){    
+    this.server.changeLogin(login);
   }
-  async changePassword(pwd){
-    this.setState({password: pwd});
-    try {
-      await AsyncStorage.setItem('@Parktris:password', pwd);
-    } catch (error) {
-      console.log("error while saving password: "+error)
-    }
+  changePassword(pass){    
+    this.server.changePassword(pass);
   }
+
   checkConnection(){
-      ParktrisServer.checkConnection(this.state.url, this.state.login, this.state.password)
+    this.server.checkConnection()
       .then(responseJson => { 
         console.log("checkConnection ok");
         this.setState({connectionResult: "connection ok"});
