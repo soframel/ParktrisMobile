@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Entypo';
 import {ServerScreen} from './ServerScreen';
 import {SlotManagement} from './SlotManagement';
 import styles from './styles.js';
+import ParktrisServer from './ParktrisServer.js';
 
 class ParktrisHome extends React.Component {
     static navigationOptions = {
@@ -18,7 +19,7 @@ class ParktrisHome extends React.Component {
         <View style={styles.container}>
           <Icon.Button name="menu" onPress={() => navigate('DrawerOpen')}/>
           <Text style={styles.title}>Parktris</Text>
-          <Text>Welcome to Parktris !</Text>
+          <Text>Welcome to Parktris!</Text>
           <Button
             onPress={() => navigate('DrawerOpen')}
             title="Open Menu"
@@ -41,6 +42,10 @@ const AppNavigator = DrawerNavigator({
 });
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    (new ParktrisServer()).loadConfiguration();
+  }
   render() {
   return <AppNavigator />;
   }
