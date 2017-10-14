@@ -97,8 +97,19 @@ export default class ParktrisServer {
         'Content-Type': 'application/json',
         'Authorization': this.buildToken()
       }
-    })
+    });
+  }
 
+  getParkingSlots(){
+    console.log("getParkingSlots");
+    return fetch(this._serverUrl + '/parkingArea', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': this.buildToken()
+      }
+    });
   }
 
 }

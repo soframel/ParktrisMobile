@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TextInput} from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput,FlatList} from 'react-native';
 import styles from './styles.js';
 import Icon from 'react-native-vector-icons/Entypo';
 
@@ -9,9 +9,11 @@ export class SlotManagement extends React.Component {
     super(props);
     this.state = { 
       showEdit: false,
+      slotId: null,
       slotLocation: null,
       slotArea: null,
       slotDesc: null,
+      slots: []
     };
   }
 
@@ -29,8 +31,18 @@ export class SlotManagement extends React.Component {
                 <Text>Location:</Text>
                 <TextInput 
                     style={styles.input}
-                    onChangeText={this.changeURL.bind(this)}
+                    onChangeText={this.changeLocation.bind(this)}
                     value={this.state.slotLocation}/>
+                <Text>Description:</Text>
+                <TextInput 
+                    style={styles.input}
+                    onChangeText={this.changeDescription.bind(this)}
+                    value={this.state.slotDescription}/>
+                
+              <Button
+                  title="Save"
+                  onPress={() => this.saveSlot()}
+                  />
             </View>
         );
     }
@@ -42,21 +54,79 @@ export class SlotManagement extends React.Component {
         <Icon.Button name="menu" onPress={() => navigate('DrawerOpen')}/>
         <Text style={styles.title}>{SlotManagement.navigationOptions.title}</Text>
 
+        {this.renderEdit()}
+
+        <Text>Your Parking Slots: </Text>
+        <FlatList
+        data={this.state.slots}
+        renderItem={({item}) => <View style={styles.oneLine}><Text>{item.location}</Text><Icon.Button name="pencil" onPress={() => this.editSlot(item)}/><Icon.Button name="trash" onPress={() => this.deleteSlot(item)}/></View>}
+      />
         <Button
             title="Add Slots"
             onPress={() => this.editSlot(null)}
         />
-
-        {this.renderEdit()}
       </View>      
     );
 
   }
-  
-  editSlot(slotId){
-    if(slotId==null){
-        //new slot
+
+  changeLocation(location){    
+    this.setState({
+      slotLocation: location
+    });
+  }
+  changeDescription(desc){    
+    this.setState({
+      slotDesc: desc
+    });
+  }
+  saveSlot(){
+    console.log("saving slot with id="+this.state.slotId+", location="+this.state.slotLocation+
+    ", description="+this.state.slotDesc+", area="+this.state.slotArea);
+    this.setState({
+      showEdit:false
+    });
+    //TODO: if id==null, create and get id, otherwise update
+    newSlots=this.state.slots.slice();
+    slot={
+      //key: this.state.slotId,
+      key: "new",
+      location: this.state.slotLocation,
+      desc: this.state.slotDesc,
+      area: this.state.slotArea
     }
+    newSlots.push(slot);
+    this.setState({
+      slots:newSlots
+    });
+  }
+  deleteSlot(slot){
+    console.log("deleting slot with id="+this.state.slotId+", location="+this.state.slotLocation+
+    ",description="+this.state.slotDesc+", area="+this.state.slotArea);
+    //TODO
+  }
+  
+  editSlot(slot){
+    if(slot==null){
+        //new slot
+        this.setState({
+          showEdit:true,
+          slotArea:null,
+          slotLocation:null,
+          slotId:null,
+          slotDesc:null
+        })
+    }
+    else{
+      this.setState({
+        showEdit:true,
+        slotArea:slot.area,
+        slotLocation:slot.location,
+        slotId:slot.key,
+        slotDesc:slot.desc
+      })
+    }
+    
   }
   
 }
