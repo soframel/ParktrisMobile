@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, TextInput,FlatList} from 'react-native';
-import styles from './styles.js';
+import styles from '../styles.js';
 import Icon from 'react-native-vector-icons/Entypo';
+import { connect } from 'react-redux';
 
-export class SlotManagement extends React.Component {
+class SlotManagement extends React.Component {
     
     constructor(props) {
     super(props);
@@ -26,8 +27,7 @@ export class SlotManagement extends React.Component {
     if(this.state.showEdit){
         return(
             <View style={styles.container}>
-                <Text>Area: </Text>
-                
+                <Text>Area:</Text>                
                 <Text>Location:</Text>
                 <TextInput 
                     style={styles.input}
@@ -37,8 +37,7 @@ export class SlotManagement extends React.Component {
                 <TextInput 
                     style={styles.input}
                     onChangeText={this.changeDescription.bind(this)}
-                    value={this.state.slotDescription}/>
-                
+                    value={this.state.slotDescription}/>                
               <Button
                   title="Save"
                   onPress={() => this.saveSlot()}
@@ -56,13 +55,13 @@ export class SlotManagement extends React.Component {
 
         {this.renderEdit()}
 
-        <Text>Your Parking Slots: </Text>
+        <Text>Your Parking Slots:</Text>
         <FlatList
         data={this.state.slots}
-        renderItem={({item}) => <View style={styles.oneLine}><Text>{item.location}</Text><Icon.Button name="pencil" onPress={() => this.editSlot(item)}/><Icon.Button name="trash" onPress={() => this.deleteSlot(item)}/></View>}
+        renderItem={({item}) => <View style={styles.oneLine}><Text style={{ alignSelf: 'stretch'}}>{item.location}</Text><Icon.Button name="pencil" onPress={() => this.editSlot(item)}/><Icon.Button name="trash" onPress={() => this.deleteSlot(item)}/></View>}
       />
         <Button
-            title="Add Slots"
+            title="Add Slot"
             onPress={() => this.editSlot(null)}
         />
       </View>      
@@ -130,3 +129,13 @@ export class SlotManagement extends React.Component {
   }
   
 }
+
+const mapStateToProps = state => ({
+})
+
+function mapDispatchToProps(dispatch) {
+  return({
+  })
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(SlotManagement)

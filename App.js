@@ -1,52 +1,58 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import { DrawerNavigator } from 'react-navigation';
-import Icon from 'react-native-vector-icons/Entypo';
-import {ServerScreen} from './ServerScreen';
-import {SlotManagement} from './SlotManagement';
-import styles from './styles.js';
-import ParktrisServer from './ParktrisServer.js';
+import { Provider, connect } from 'react-redux';
+import thunk from 'redux-thunk';
+import { combineReducers } from 'redux'
+import {AppNavigator} from './navigation';
+import {configureServer} from './store/store.js';
+import { addNavigationHelpers } from 'react-navigation';
+import { createStore,applyMiddleware } from 'redux';
+import {loadUrl,loadLogin,loadPassword} from './actions/serverActions';
 
-class ParktrisHome extends React.Component {
-    static navigationOptions = {
-      title: 'Home',
-      drawerLabel: 'Home',      
-    }    
-  
-    render() {
-      const { navigate } = this.props.navigation;
-      return (
-        <View style={styles.container}>
-          <Icon.Button name="menu" onPress={() => navigate('DrawerOpen')}/>
-          <Text style={styles.title}>Parktris</Text>
-          <Text>Welcome to Parktris!</Text>
-          <Button
-            onPress={() => navigate('DrawerOpen')}
-            title="Open Menu"
-          />
-        </View>
-      );
-    }
-  }
+//Reducer for navigator
+const initialState = AppNavigator.router.getStateForAction(AppNavigator.router.getActionForPathAndParams('Home'));
+const navReducer = (state = initialState, action) => {
+    const nextState = AppNavigator.router.getStateForAction(action, state);
+    // Simply return the original `state` if `nextState` is null or undefined.
+    return nextState || state;
+  };
 
-const AppNavigator = DrawerNavigator({
-  Home: {
-    screen: ParktrisHome,
-  },
-  Server: {
-    screen: ServerScreen,
-  },
-  SlotManagement: {
-    screen: SlotManagement,
+  //Combined reducer
+const appReducer = combineReducers({
+    nav: navReducer,
+    configureServer: configureServer
+  });
+
+//Special component to enable redux in react-navigation
+class AppWithNavi extends React.Component {
+  render() {
+    return (
+      <AppNavigator navigation={addNavigationHelpers({
+        dispatch: this.props.dispatch,
+        state: this.props.nav,
+      })} />
+    );
   }
+}
+const mapStateToProps = (state) => ({
+  nav: state.nav
 });
+const AppWithNavigationState = connect(mapStateToProps)(AppWithNavi);
+
+const store=createStore(appReducer,applyMiddleware(thunk));
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    (new ParktrisServer()).loadConfiguration();
+    //loadUrl();
+    //loadLogin();
+    //loadPassword();
   }
   render() {
-  return <AppNavigator />;
+    return (
+    <Provider store={store}>
+      <AppWithNavigationState/>
+    </Provider> 
+  );
   }
 }
+
