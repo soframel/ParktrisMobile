@@ -1,6 +1,6 @@
 import {STORE_LOGIN,STORE_URL,STORE_PWD}from '../actions/actions';
 
-export const configureServer = (state, action) => {
+export const serverSettings = (state, action) => {
   switch (action.type) {    
     case STORE_URL:{
         console.log("storing url: "+action.serverUrl);
@@ -38,4 +38,4 @@ export const configureServer = (state, action) => {
   }
 }
 
-export default configureServer;
+export default serverSettings;

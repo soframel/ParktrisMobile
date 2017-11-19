@@ -1,6 +1,6 @@
 import base64 from 'base-64';
 import { AsyncStorage } from 'react-native';
-import {STORE_LOGIN,STORE_URL,STORE_PWD} from './actions';
+import {STORE_LOGIN,STORE_URL,STORE_PWD,STORE_STATUS} from './actions';
 
 /** simple action creators*/
 
@@ -23,6 +23,13 @@ export function storePassword(newPwd){
   return {
     type: STORE_PWD,
     password: newPwd,
+  }
+}
+
+export function storeStatus(status){
+  return {
+    type: STORE_STATUS,
+    status: status
   }
 }
 

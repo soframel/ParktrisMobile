@@ -3,7 +3,7 @@ import { Provider, connect } from 'react-redux';
 import thunk from 'redux-thunk';
 import { combineReducers } from 'redux'
 import {AppNavigator} from './navigation';
-import {configureServer} from './store/store.js';
+import {serverSettings} from './store/store.js';
 import { addNavigationHelpers } from 'react-navigation';
 import { createStore,applyMiddleware } from 'redux';
 import {loadUrl,loadLogin,loadPassword} from './actions/serverActions';
@@ -19,7 +19,7 @@ const navReducer = (state = initialState, action) => {
   //Combined reducer
 const appReducer = combineReducers({
     nav: navReducer,
-    configureServer: configureServer
+    serverSettings: serverSettings
   });
 
 //Special component to enable redux in react-navigation
@@ -50,7 +50,7 @@ export default class App extends React.Component {
   render() {
     return (
     <Provider store={store}>
-      <AppWithNavigationState/>
+      <AppWithNavigationState />
     </Provider> 
   );
   }

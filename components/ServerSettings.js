@@ -13,18 +13,18 @@ class ServerSettings extends React.Component {
     drawerLabel: 'Server & Login Settings',      
   }
 
-  constructor(props) {
-    super(props);
-    this.props.loadUrl();
-    this.props.loadLogin();
-    this.props.loadPassword();
-  }
-
-  // componentDidMount() {
+  // constructor(props) {
+  //   super(props);
   //   this.props.loadUrl();
   //   this.props.loadLogin();
   //   this.props.loadPassword();
   // }
+
+  componentDidMount() {
+    this.props.loadUrl();
+    this.props.loadLogin();
+    this.props.loadPassword();
+  }
 
   changeURL(url){
     this.props.saveUrl(url);
@@ -75,7 +75,7 @@ class ServerSettings extends React.Component {
             value={this.props.password}
             secureTextEntry={true}
             onChangeText={this.changePassword.bind(this)}
-        />
+        />        
         <Button
           title="Check connection "
           onPress={this.checkConnection.bind(this)}
@@ -92,10 +92,11 @@ class ServerSettings extends React.Component {
   }
 }
 
+
 const mapStateToProps = state => ({
-  serverUrl: state.serverUrl,
-  login: state.login,
-  password : state.password
+  serverUrl: state.serverSettings.serverUrl,
+  login: state.serverSettings.login,
+  password : state.serverSettings.password
 })
 
 function mapDispatchToProps(dispatch) {
