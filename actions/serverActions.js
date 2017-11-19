@@ -1,6 +1,6 @@
 import base64 from 'base-64';
 import { AsyncStorage } from 'react-native';
-import {STORE_LOGIN,STORE_URL,STORE_PWD,STORE_STATUS} from './actions';
+import {STORE_LOGIN,STORE_URL,STORE_PWD,STORE_STATUS,STATUS_ERROR,STATUS_OK,STATUS_UNKNOWN} from './actions';
 
 /** simple action creators*/
 
@@ -115,28 +115,32 @@ export function savePassword(pwd) {
     }
 }
 
-// export function checkConnection(serverUrl, login, password) {
-//   console.log("checking connection to server " + serverUrl + " with login " + login);
-//   //TODO: add timeout when it is supported by API !
-//   return fetch(serverUrl + '/parkingArea', {
-//     method: 'GET',
-//     headers: {
-//       'Accept': 'application/json',
-//       'Content-Type': 'application/json',
-//       'Authorization': this.buildToken()
-//     }
-//   });
+export function checkConnection(serverUrl, login, password) {
+  return (dispatch,getState) => {
+    console.log("checking connection to server " + serverUrl + " with login " + login);
+    //TODO: add timeout when it is supported by API !
+    return fetch(serverUrl + '/parkingArea', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': buildToken(login, password)
+      }
+    }).then(
+      (result) => {
+        console.log("connection ok");
+        dispatch(storeStatus(STATUS_OK));
+      }
+    )
+    .catch(
+      (error)=>{
+        console.log("connection problem"+error);
+        dispatch(storeStatus(STATUS_ERROR));
+      }
+    );
+  }
+}
 
-//       //return the action for the store
-//       return {
-//         type: LOAD_SETTINGS,
-//         serverUrl: currentUrl,
-//         login: currentLogin,
-//         password: currentPwd,
-//         connectionStatus: "LOADING"
-//       }
-// }
-
-function buildToken() {
-  return "Basic " + base64.encode(this._login + ":" + this._password);
+function buildToken(login, password) {
+  return "Basic " + base64.encode(login + ":" + password);
 }

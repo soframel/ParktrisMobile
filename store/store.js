@@ -1,4 +1,4 @@
-import {STORE_LOGIN,STORE_URL,STORE_PWD}from '../actions/actions';
+import {STORE_LOGIN,STORE_URL,STORE_PWD,STORE_STATUS,STATUS_ERROR,STATUS_OK,STATUS_UNKNOWN}from '../actions/actions';
 
 export const serverSettings = (state, action) => {
   switch (action.type) {    
@@ -8,6 +8,7 @@ export const serverSettings = (state, action) => {
             serverUrl: action.serverUrl,
             login: state.login,
             password : state.password,
+            connectionStatus: STATUS_UNKNOWN
         };
     }
     case STORE_LOGIN:{
@@ -16,6 +17,7 @@ export const serverSettings = (state, action) => {
             serverUrl: state.serverUrl,
             login: action.login,
             password : state.password,
+            connectionStatus: STATUS_UNKNOWN
         };
     }
     case STORE_PWD:{
@@ -24,12 +26,22 @@ export const serverSettings = (state, action) => {
             serverUrl: state.serverUrl,
             login: state.login,
             password : action.password,
+            connectionStatus: STATUS_UNKNOWN
+        };
+    }
+    case STORE_STATUS:{
+        console.log("storing status "+action.status);
+        return {
+            serverUrl: state.serverUrl,
+            login: state.login,
+            password : state.password,
+            connectionStatus: action.status
         };
     }
     default:{
         console.log("default: returning state "+state+", action="+action.type);
         if(typeof state === "undefined"){
-            return {serverUrl: "",login: "",password : ""};
+            return {serverUrl: "",login: "",password : "",connectionStatus:"UNKNOWN"};
         }
         else{
             return state;

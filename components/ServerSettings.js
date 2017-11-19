@@ -5,7 +5,8 @@ import Icon from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
 //import {} from '../actions/actions.js';
 import store from '../store/store.js';
-import {saveUrl,saveLogin,savePassword,loadUrl,loadLogin,loadPassword} from '../actions/serverActions';
+import {saveUrl,saveLogin,savePassword,loadUrl,loadLogin,loadPassword,checkConnection} from '../actions/serverActions';
+import {STATUS_ERROR,STATUS_OK,STATUS_UNKNOWN} from '../actions/actions';
 
 class ServerSettings extends React.Component {
   static navigationOptions = {
@@ -37,17 +38,7 @@ class ServerSettings extends React.Component {
   }
 
   checkConnection(){
-    console.log("TODO: check connection");
-      // this.server.checkConnection()
-      //   .then(responseJson => { 
-      //     console.log("checkConnection ok");
-      //     this.setState({connectionResult: "connection ok"});
-      //   })
-      //   .catch(error => { 
-      //     console.log("checkConnection error="+error); 
-      //     this.setState({connectionResult: "problem with connection"});
-      //   });
-
+    this.props.checkConnection(this.props.serverUrl,this.props.login,this.props.password);     
   }
 
   render() {
@@ -77,10 +68,10 @@ class ServerSettings extends React.Component {
             onChangeText={this.changePassword.bind(this)}
         />        
         <Button
-          title="Check connection "
+          title="Check connection"
           onPress={this.checkConnection.bind(this)}
         />
-        <Text>{this.props.connectionResult}</Text>
+          <Text>{(this.props.connectionStatus !== 'undefined' && this.props.connectionStatus!==STATUS_UNKNOWN)?this.props.connectionStatus:""}</Text> 
         <Button
           title="Home"
           onPress={() =>
@@ -90,13 +81,27 @@ class ServerSettings extends React.Component {
       </View>
     );
   }
+
+  showConnectionStatus(){
+    if(this.props.connectionStatus !== 'undefined' && this.props.connectionStatus!=STATUS_UNKNOWN){
+      return this.props.connectionStatus;
+    }
+    else{
+      return "TEST"
+    }
+  }
+
 }
 
+/*
+ <Text>{(this.props.connectionStatus !== 'undefined' && this.props.connectionStatus!==STATUS_UNKNOWN)?"":this.props.connectionStatus}</Text> 
+        <Text>{this.showConnectionStatus.bind(this)}</Text>  */
 
 const mapStateToProps = state => ({
   serverUrl: state.serverSettings.serverUrl,
   login: state.serverSettings.login,
-  password : state.serverSettings.password
+  password : state.serverSettings.password,
+  connectionStatus: state.serverSettings.connectionStatus
 })
 
 function mapDispatchToProps(dispatch) {
@@ -107,6 +112,7 @@ function mapDispatchToProps(dispatch) {
       saveUrl: (url) => {dispatch(saveUrl(url))},
       saveLogin: (login) => {dispatch(saveLogin(login))},
       savePwd: (pwd) => {dispatch(savePwd(pwd))},
+      checkConnection: (url,login,pwd) => {dispatch(checkConnection(url,login,pwd))}
   });
 }
 
