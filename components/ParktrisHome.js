@@ -3,12 +3,20 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import styles from '../styles.js';
 import { connect } from 'react-redux';
+import {loadServerSettings} from '../actions/serverActions';
 
 class ParktrisHome extends React.Component {
     static navigationOptions = {
       title: 'Home',
       drawerLabel: 'Home',      
     }    
+
+
+  componentDidMount() {
+    this.props.loadServerSettings();
+    console.log("ParktrisHome: current serverUrl="+this.props.serverUrl, ", login="+this.props.login);
+  }
+
   
     render() {
       const { navigate } = this.props.navigation;
@@ -16,10 +24,10 @@ class ParktrisHome extends React.Component {
         <View style={styles.container}>
           <Icon.Button name="menu" onPress={() => navigate('DrawerOpen')}/>
           <Text style={styles.title}>Parktris</Text>
-          <Text>Welcome to Parktris!</Text>
+          <Text>Welcome to Parktris! </Text>
           <Button
-            onPress={() => navigate('DrawerOpen')}
-            title="Open Menu"
+            onPress={() => navigate('SlotManagement')}
+            title="Manage Slots"
           />
         </View>
       );
@@ -27,10 +35,14 @@ class ParktrisHome extends React.Component {
   }
 
   const mapStateToProps = state => ({
+    serverUrl: state.serverSettings.serverUrl,
+    login: state.serverSettings.login,
+    password : state.serverSettings.password
   })
   
   function mapDispatchToProps(dispatch) {
     return({
+      loadServerSettings: () => {dispatch(loadServerSettings())}
     })
   }
   

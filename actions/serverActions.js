@@ -1,6 +1,6 @@
 import base64 from 'base-64';
 import { AsyncStorage } from 'react-native';
-import {STORE_LOGIN,STORE_URL,STORE_PWD,STORE_STATUS,STATUS_ERROR,STATUS_OK,STATUS_UNKNOWN} from './actions';
+import {STORE_LOGIN,STORE_URL,STORE_PWD,STORE_ALL,STORE_STATUS,STATUS_ERROR,STATUS_OK,STATUS_UNKNOWN} from './actions';
 
 /** simple action creators*/
 
@@ -23,6 +23,15 @@ export function storePassword(newPwd){
   return {
     type: STORE_PWD,
     password: newPwd,
+  }
+}
+
+export function storeAll(url, login, pwd){
+  return {
+    type: STORE_ALL,
+    serverUrl: url,
+    login: login,
+    password: pwd
   }
 }
 
@@ -74,6 +83,29 @@ export function loadPassword() {
 
       });
     }
+}
+
+export function loadServerSettings(){
+  return (dispatch,getState) => {
+    AsyncStorage.getItem('@Parktris:serverURL').then(
+      (result) => {         
+          serverUrl=result;
+          console.log("loaded serverUrl=" + serverUrl);
+          AsyncStorage.getItem('@Parktris:login').then(
+            (result2) => {         
+                  login=result2;
+                  console.log("loaded login=" + login);
+                  AsyncStorage.getItem('@Parktris:password').then(
+                    (result3) => {         
+                          pwd=result3;
+                          console.log("loaded password");
+                   
+                        dispatch(storeAll(serverUrl, login, pwd));
+                        return result3;
+                    })
+                  })
+                });
+  };
 }
 
 export function saveUrl(serverUrl) {
@@ -141,6 +173,8 @@ export function checkConnection(serverUrl, login, password) {
   }
 }
 
-function buildToken(login, password) {
-  return "Basic " + base64.encode(login + ":" + password);
+export function buildToken(login, password) {
+  token= "Basic " + base64.encode(login + ":" + password);
+  console.log("token="+token);
+  return token;
 }

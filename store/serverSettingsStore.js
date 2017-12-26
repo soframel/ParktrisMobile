@@ -1,4 +1,4 @@
-import {STORE_LOGIN,STORE_URL,STORE_PWD,STORE_STATUS,STATUS_ERROR,STATUS_OK,STATUS_UNKNOWN}from '../actions/actions';
+import {STORE_LOGIN,STORE_URL,STORE_PWD,STORE_ALL,STORE_STATUS,STATUS_ERROR,STATUS_OK,STATUS_UNKNOWN}from '../actions/actions';
 
 export const serverSettings = (state, action) => {
   switch (action.type) {    
@@ -25,6 +25,15 @@ export const serverSettings = (state, action) => {
         return {
             serverUrl: state.serverUrl,
             login: state.login,
+            password : action.password,
+            connectionStatus: STATUS_UNKNOWN
+        };
+    }
+    case STORE_ALL:{
+        console.log("storing all: serverURL="+action.serverUrl+", login="+action.login);
+        return {
+            serverUrl: action.serverUrl,
+            login: action.login,
             password : action.password,
             connectionStatus: STATUS_UNKNOWN
         };
