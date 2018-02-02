@@ -39,7 +39,7 @@ class SlotManagement extends React.Component {
                     style={styles.input}
                     onChangeText={this.changeDescription.bind(this)}
                     value={this.props.desc}/>    
-                <Text>Area:</Text>                
+                <Text>Area: </Text>                
                 <TextInput 
                     style={styles.input}
                     onChangeText={this.changeArea.bind(this)}
@@ -64,6 +64,7 @@ class SlotManagement extends React.Component {
         <Text>Your Parking Slots:</Text>
         <FlatList
         data={this.props.slots}
+        keyExtractor={slot => slot.name}
         renderItem={({item}) => <View style={styles.oneLine}><Text style={{ alignSelf: 'stretch'}}>{item.name}</Text><Icon.Button name="pencil" onPress={() => this.editSlot(item)}/><Icon.Button name="trash" onPress={() => this.deleteSlot(item)}/></View>}
       />
         <Button
@@ -107,7 +108,8 @@ class SlotManagement extends React.Component {
         //new slot    
     }
     else{
-      this.props.getCurrentSlot(slot.key);
+      console.log("editing slot "+slot.name)
+      this.props.getCurrentSlot(slot.name);
     } 
   }
 }

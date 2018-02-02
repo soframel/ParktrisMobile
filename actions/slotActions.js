@@ -47,6 +47,9 @@ export function saveSlot(serverUrl, login, password, id, name, desc, areaId, own
       (result) => {         
           dispatch(storeSlot(id, name, desc, areaId, owner));
           return result;
+      })
+      .catch((error) => {
+        console.error(error);
       });
     }
 }
@@ -56,7 +59,7 @@ export function loadSlot(serverUrl, login, password, id){
     fetch(serverUrl+'parkingSlot/'+id, {
       method: 'GET',
       headers: {
-        Accept: 'application/json',
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': buildToken(login, password)
       }
@@ -66,42 +69,52 @@ export function loadSlot(serverUrl, login, password, id){
           slot=result.json()._embedded.parkingSlot;      
           dispatch(storeSlot(slot.id, slot.name, slot.desc, slot.areaId, slot.owner));
           return result;
+      })
+      .catch((error) => {
+        console.error(error);
       });
     }
 }
 
+/**
+ * TODO: test. current slots where not loaded ?
+ */
 export function getCurrentSlot(id){
   return (dispatch,getState) => {
       //find by id in slots list
-      getById=function(slot){
+      const {slots}=getState().then( (slots) =>{
+      console.log("list of slots: "+JSON.stringify(slots));
+      getById=function(id){
         return s.id==id;
       }
       slot=slots.find(getById);  
 
       dispatch(storeSlot(slot));
       return result;
-  }
+    })
+    };
+  
 }
 
 
 export function loadOwnerSlots(serverUrl, login, password){
   return (dispatch,getState) => {
-    fetch(serverUrl+'/parkingSlot/search/findAllByOwner?owner='+login, {
+    fetch(serverUrl+'/parkingSlot/search/findAllByOwner?owner='+login, {              
       method: 'GET',
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
         'Authorization': buildToken(login, password)
       }
     })
-    .then(
-      (result) => {  
-        json=result.json(); 
-        console.log("result="+JSON.stringify(json));
-          slots=json._embedded;  
-          console.log("loaded slots: "+slots)    
+    .then(response => response.json())
+    .then((response) => {  
+          console.log("loadOwnerSlots for owner "+login+", result="+JSON.stringify(response));
+          slots=response._embedded.parkingSlot;  
+          console.log("loaded slots: "+slots.length);    
           dispatch(storeSlots(slots));
-          return result;
+          return response;
+      })
+      .catch((error) => {
+        console.error(error);
       });
     }
 }
