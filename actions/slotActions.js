@@ -28,7 +28,8 @@ export function storeSlots(slots){
 
 export function saveSlot(serverUrl, login, password, id, name, desc, areaId, owner) {
   return (dispatch,getState) => {
-    fetch(serverUrl+'parkingSlot', {
+    console.log("saving slot id="+id+", name="+name+", desc="+desc+", areaId="+areaId+", owner="+owner);
+    fetch(serverUrl+'/parkingSlot', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -40,16 +41,24 @@ export function saveSlot(serverUrl, login, password, id, name, desc, areaId, own
         name: name,
         desc: desc,
         areaId: areaId,
-        owner: owner
+        owner: {
+          "login": owner
+        }
       }),
     })
     .then(
-      (result) => {         
+      (result) => {      
+        if(result.status>=200 && result.status<300 && result.ok==true){   
+          console.log("saved slot OK ")
           dispatch(storeSlot(id, name, desc, areaId, owner));
           return result;
+        }
+        else{
+          console.log("an error occured while saving slot: "+JSON.stringify(result));
+        }
       })
       .catch((error) => {
-        console.error(error);
+        console.error("error while saving slot: "+error);
       });
     }
 }
@@ -77,23 +86,22 @@ export function loadSlot(serverUrl, login, password, id){
 }
 
 /**
- * TODO: test. current slots where not loaded ?
+ * TODO: complete. Current slots where not loaded ?
  */
 export function getCurrentSlot(id){
   return (dispatch,getState) => {
       //find by id in slots list
-      const {slots}=getState().then( (slots) =>{
+      const {slots}=getState().slotSettings;
       console.log("list of slots: "+JSON.stringify(slots));
-      getById=function(id){
-        return s.id==id;
+      getById=function(slot){
+        return slot.name==id;
       }
-      slot=slots.find(getById);  
+      slot=slots.find(getById); 
+      console.log("found slot: "+JSON.stringify(slot)); 
 
-      dispatch(storeSlot(slot));
-      return result;
-    })
+      dispatch(storeSlot(slot.id, slot.name, slot.desc, slot.areaId, slot.owner));
+      return slot;
     };
-  
 }
 
 
@@ -107,14 +115,22 @@ export function loadOwnerSlots(serverUrl, login, password){
     })
     .then(response => response.json())
     .then((response) => {  
-          console.log("loadOwnerSlots for owner "+login+", result="+JSON.stringify(response));
+          console.log("loadOwnerSlots for owner "+login+", status="+response.status+", result="+JSON.stringify(response));
+          
+          if(response.status<200 && response.status>=300){
+            console.log("an error occured !");
+          }
+          else{
           slots=response._embedded.parkingSlot;  
           console.log("loaded slots: "+slots.length);    
           dispatch(storeSlots(slots));
+          console.log("stored owner slots");
           return response;
+        }
       })
       .catch((error) => {
         console.error(error);
       });
     }
+
 }

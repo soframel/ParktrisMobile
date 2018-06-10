@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TextInput,FlatList} from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput,FlatList,Picker, Item} from 'react-native';
 import styles from '../styles.js';
 import Icon from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
 import {saveSlot,storeSlot,loadOwnerSlots,getCurrentSlot} from '../actions/slotActions';
 import {loadServerSettings} from '../actions/serverActions';
+import { loadAreas } from '../actions/areaActions.js';
 
 class SlotManagement extends React.Component {
     
@@ -17,6 +18,7 @@ class SlotManagement extends React.Component {
 
   componentDidMount() {
     console.log("Slot Management: current serverUrl="+this.props.serverUrl +", login="+this.props.login);
+    this.props.loadAreas(this.props.serverUrl, this.props.login, this.props.password);
     this.props.loadOwnerSlots(this.props.serverUrl, this.props.login, this.props.password);
   }
 
@@ -39,11 +41,17 @@ class SlotManagement extends React.Component {
                     style={styles.input}
                     onChangeText={this.changeDescription.bind(this)}
                     value={this.props.desc}/>    
-                <Text>Area: </Text>                
-                <TextInput 
-                    style={styles.input}
-                    onChangeText={this.changeArea.bind(this)}
-                    value={this.props.areaId}/>                     
+                <Text>Area: </Text>    
+                <Picker
+                  selectedValue={this.props.area}
+                  style={{ height: 50, width: 100 }}
+                  onValueChange={(itemValue, itemIndex) => this.changeArea(itemValue)}
+                  >
+                   {this.props.areas.map((area) => {
+                     //console.log("building Picker with item "+JSON.stringify(area));
+                     return (<Picker.Item label={area.name} value={area} key={area.id} />) 
+                    })}
+                </Picker>                             
               <Button
                   title="Save"
                   onPress={() => this.saveSlot()}
@@ -77,26 +85,27 @@ class SlotManagement extends React.Component {
   }
 
   changeName(name){   
-    this.props.storeSlot (this.props.id,name,this.props.desc,this.props.areaId,this.props.owner);
+    this.props.storeSlot (this.props.id,name,this.props.desc,this.props.area,this.props.owner);
   }
   changeDescription(desc){    
-    this.props.storeSlot (this.props.id,this.props.name,desc,this.props.areaId,this.props.owner);
+    this.props.storeSlot (this.props.id,this.props.name,desc,this.props.area,this.props.owner);
   }
-  changeArea(areaId){    
-    this.props.storeSlot (this.props.id,this.props.name,this.props.desc,areaId,this.props.owner);
+  changeArea(area){    
+    this.props.storeSlot (this.props.id,this.props.name,this.props.desc,area.id,this.props.owner);
+    this.props.area=area;
   }
   saveSlot(){
     console.log("saving slot with id="+this.props.id+", name="+this.props.name+
-    ", description="+this.props.desc+", areaId="+this.props.areaId);
+    ", description="+this.props.desc+", areaId="+this.props.area.id);
     this.setState({
       showEdit:false
     });
-    this.props.saveSlot(url,login,password,this.props.id,this.props.name,this.props.desc,this.props.areaId,this.props.login);
-    this.props.loadOwnerSlots(url,login,password);
+    this.props.saveSlot(this.props.serverUrl,this.props.login,this.props.password,this.props.id,this.props.name,this.props.desc,this.props.area,this.props.login);
+    this.props.loadOwnerSlots(this.props.serverUrl,this.props.login,this.props.password);
   }
   deleteSlot(slot){
     console.log("deleting slot with id="+this.props.id+", name="+this.props.name+
-    ",description="+this.props.desc+", area="+this.props.areaId);
+    ",description="+this.props.desc+", areaId="+this.props.area.id);
     //TODO
   }
   
@@ -123,7 +132,8 @@ const mapStateToProps = state => ({
   desc: state.slotSettings.slotDescription,
   areaId: state.slotSettings.slotAreaId,
   ownerId: state.slotSettings.slotOwnerId,
-  slots: state.slotSettings.slots
+  slots: state.slotSettings.slots,
+  areas: state.areaSettings.areas
 })
 
 function mapDispatchToProps(dispatch) {
@@ -132,7 +142,8 @@ function mapDispatchToProps(dispatch) {
     storeSlot: (id, name, desc, areaId, owner) => {dispatch(storeSlot(id, name, desc, areaId, owner))},
     saveSlot: (url,login,pwd, id, name, desc, areaId, owner) => {dispatch(saveSlot(url,login,pwd, id, name, desc, areaId, owner))},
     loadOwnerSlots: (url,login,pwd) => {dispatch(loadOwnerSlots(url,login,pwd))},
-    getCurrentSlot: (id) => {dispatch(getCurrentSlot(id))}
+    getCurrentSlot: (id) => {dispatch(getCurrentSlot(id))},
+    loadAreas: (url,login,pwd) => {dispatch(loadAreas(url,login,pwd))}
   });
 }
 

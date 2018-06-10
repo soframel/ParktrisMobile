@@ -160,8 +160,14 @@ export function checkConnection(serverUrl, login, password) {
       }
     }).then(
       (result) => {
-        console.log("connection ok");
-        dispatch(storeStatus(STATUS_OK));
+        if(result.status>=200 && result.status<300 && result.ok==true){
+          console.log("connection ok: "+JSON.stringify(result));
+          dispatch(storeStatus(STATUS_OK));
+        }
+        else{
+          console.log("an error occured: "+JSON.stringify(result));
+          dispatch(storeStatus(STATUS_ERROR));
+        }
       }
     )
     .catch(

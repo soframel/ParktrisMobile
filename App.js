@@ -5,6 +5,7 @@ import { combineReducers } from 'redux'
 import {AppNavigator} from './navigation';
 import {serverSettings} from './store/serverSettingsStore';
 import {slotSettings} from './store/slotStore';
+import {areaSettings} from './store/areaStore';
 import { addNavigationHelpers } from 'react-navigation';
 import { createStore,applyMiddleware } from 'redux';
 import {loadUrl,loadLogin,loadPassword} from './actions/serverActions';
@@ -21,7 +22,8 @@ const navReducer = (state = initialState, action) => {
 const appReducer = combineReducers({
     nav: navReducer,
     serverSettings: serverSettings,
-    slotSettings: slotSettings
+    slotSettings: slotSettings,
+    areaSettings: areaSettings
   });
 
 //Special component to enable redux in react-navigation

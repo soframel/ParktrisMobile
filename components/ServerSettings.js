@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Button, TextInput, AsyncStorage } from 'react-n
 import styles from '../styles.js';
 import Icon from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
-import {saveUrl,saveLogin,savePassword,loadUrl,loadLogin,loadPassword,checkConnection} from '../actions/serverActions';
+import {saveUrl,saveLogin,savePassword,loadUrl,loadLogin,loadPassword,checkConnection, storeUrl,storeLogin,storePassword} from '../actions/serverActions';
 import {STATUS_ERROR,STATUS_OK,STATUS_UNKNOWN} from '../actions/actions';
 
 class ServerSettings extends React.Component {
@@ -19,14 +19,28 @@ class ServerSettings extends React.Component {
   }
 
   changeURL(url){
-    this.props.saveUrl(url);
+    this.props.storeUrl(url);
   }
   changeLogin(login){    
-    this.props.saveLogin(login);
+    this.props.storeLogin(login);
   }
   changePassword(pass){    
+   this.props.storePassword(pass);
+  }
+  saveURL(url){
+    this.props.saveUrl(url);
+  }
+  saveLogin(login){    
+    this.props.saveLogin(login);
+  }
+  savePassword(pass){    
    this.props.savePassword(pass);
   }
+  saveSettings(){    
+    this.props.saveUrl(this.props.serverUrl);
+    this.props.saveLogin(this.props.login);
+    this.props.savePassword(this.props.password);
+   }
 
   checkConnection(){
     this.props.checkConnection(this.props.serverUrl,this.props.login,this.props.password);     
@@ -38,7 +52,7 @@ class ServerSettings extends React.Component {
       <View style={styles.container}>
         <Icon.Button name="menu" onPress={() => navigate('DrawerOpen')}/>
         <Text style={styles.title}>Server Settings</Text>
-        <Text>Parktris Mobile needs to know which parktris server to use in order to work. </Text>
+        <Text>Parktris Mobile needs to know which ParkTris server to use in order to work. </Text>
         <Text>Server URL:</Text>
         <TextInput 
           style={styles.input}       
@@ -62,11 +76,14 @@ class ServerSettings extends React.Component {
           title="Check connection"
           onPress={this.checkConnection.bind(this)}
         />
-          <Text>{(this.props.connectionStatus !== 'undefined' && this.props.connectionStatus!==STATUS_UNKNOWN)?this.props.connectionStatus:""}</Text> 
+          <Text>{(this.props.connectionStatus !== 'undefined' && this.props.connectionStatus!==STATUS_UNKNOWN)?this.props.connectionStatus:""}</Text>           
+        <Button
+          title="Save"
+          onPress={this.saveSettings.bind(this)}
+        />        
         <Button
           title="Home"
-          onPress={() =>
-            navigate('Home')
+          onPress={() =>navigate('Home')
           }
         />
       </View>
@@ -89,6 +106,9 @@ function mapDispatchToProps(dispatch) {
       saveUrl: (url) => {dispatch(saveUrl(url))},
       saveLogin: (login) => {dispatch(saveLogin(login))},
       savePassword: (pwd) => {dispatch(savePassword(pwd))},
+      storeUrl: (url) => {dispatch(storeUrl(url))},
+      storeLogin: (login) => {dispatch(storeLogin(login))},
+      storePassword: (pwd) => {dispatch(storePassword(pwd))},
       checkConnection: (url,login,pwd) => {dispatch(checkConnection(url,login,pwd))}
   });
 }

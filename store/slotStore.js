@@ -8,20 +8,20 @@ export const slotSettings = (state, action) => {
             slotId: action.slotId,
             slotName: action.slotName,
             slotDescription: action.slotDescription,
-            slotAreaId: action.slotAreaId,
+            slotArea: action.slotArea,
             slotOwner: action.slotOwner,
             slots: state.slots
           }
     }
     case STORE_SLOTS:{
-        console.log("storing slots ");
+        console.log("storing slots "+action.slots.length);
         return {
             slots: action.slots,
             //leave current slot unchanged
             slotId: state.slotId,
             slotName: state.slotName,
             slotDescription: state.slotDescription,
-            slotAreaId: state.slotAreaId,
+            slotArea: state.slotArea,
             slotOwner: state.slotOwner
           }
     }
@@ -32,7 +32,7 @@ export const slotSettings = (state, action) => {
                 slotId: null,
                 slotName: "",
                 slotDescription: "",
-                slotAreaId: null,
+                slotArea: null,
                 slotOwner: null,
                 slots: null
               }
