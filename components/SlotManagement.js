@@ -29,6 +29,7 @@ class SlotManagement extends React.Component {
 
   renderEdit=function(){
     if(this.state.showEdit){
+      console.log("renderEdit for slot "+this.props.name+", area="+this.props.areaId);
         return(
             <View style={styles.container}>
                 <Text>Name:</Text>  
@@ -43,18 +44,22 @@ class SlotManagement extends React.Component {
                     value={this.props.desc}/>    
                 <Text>Area: </Text>    
                 <Picker
-                  selectedValue={this.props.area}
+                  selectedValue={this.props.areaId}
                   style={{ height: 50, width: 100 }}
                   onValueChange={(itemValue, itemIndex) => this.changeArea(itemValue)}
                   >
                    {this.props.areas.map((area) => {
                      //console.log("building Picker with item "+JSON.stringify(area));
-                     return (<Picker.Item label={area.name} value={area} key={area.id} />) 
+                     return (<Picker.Item label={area.name} value={area.id} key={area.id} />) 
                     })}
                 </Picker>                             
-              <Button
+                <Button
                   title="Save"
                   onPress={() => this.saveSlot()}
+                  />
+              <Button
+                  title="Cancel"
+                  onPress={() => this.cancelEdit()}
                   />
             </View>
         );
@@ -85,28 +90,47 @@ class SlotManagement extends React.Component {
   }
 
   changeName(name){   
-    this.props.storeSlot (this.props.id,name,this.props.desc,this.props.area,this.props.owner);
+    this.props.storeSlot (this.props.id,name,this.props.desc,this.props.areaId,this.props.owner);
   }
   changeDescription(desc){    
-    this.props.storeSlot (this.props.id,this.props.name,desc,this.props.area,this.props.owner);
+    this.props.storeSlot (this.props.id,this.props.name,desc,this.props.areaId,this.props.owner);
   }
-  changeArea(area){    
-    this.props.storeSlot (this.props.id,this.props.name,this.props.desc,area.id,this.props.owner);
-    this.props.area=area;
+  changeArea(areaId){    
+    this.props.storeSlot (this.props.id,this.props.name,this.props.desc,areaId,this.props.owner);
+    this.props.areaId=areaId;
   }
   saveSlot(){
     console.log("saving slot with id="+this.props.id+", name="+this.props.name+
-    ", description="+this.props.desc+", areaId="+this.props.area.id);
+    ", description="+this.props.desc+", areaId="+this.props.areaId);
     this.setState({
       showEdit:false
     });
-    this.props.saveSlot(this.props.serverUrl,this.props.login,this.props.password,this.props.id,this.props.name,this.props.desc,this.props.area,this.props.login);
+    this.props.saveSlot(this.props.serverUrl,this.props.login,this.props.password,this.props.id,this.props.name,this.props.desc,this.props.areaId,this.props.login);
     this.props.loadOwnerSlots(this.props.serverUrl,this.props.login,this.props.password);
+
+    this.resetCurrentSlot();
+  }
+  cancelEdit(){
+    this.setState({
+      showEdit:false,
+    })
+    this.resetCurrentSlot();
   }
   deleteSlot(slot){
     console.log("deleting slot with id="+this.props.id+", name="+this.props.name+
-    ",description="+this.props.desc+", areaId="+this.props.area.id);
+    ",description="+this.props.desc+", areaId="+this.props.areaId);
     //TODO
+
+    this.resetCurrentSlot();
+  }
+
+  resetCurrentSlot(){
+    console.log("resetting current slot");
+    this.props.id=null;
+    this.props.name=null;
+    this.props.desc=null;
+    this.props.areaId=null;
+    this.props.ownerId=null;
   }
   
   editSlot(slot){
