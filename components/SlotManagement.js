@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Button, TextInput,FlatList,Picker, Item} from '
 import styles from '../styles.js';
 import Icon from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
-import {saveSlot,storeSlot,loadOwnerSlots,getCurrentSlot} from '../actions/slotActions';
+import {saveSlot,storeSlot,loadOwnerSlots,getCurrentSlot,deleteSlot} from '../actions/slotActions';
 import {loadServerSettings} from '../actions/serverActions';
 import { loadAreas } from '../actions/areaActions.js';
 
@@ -66,17 +66,17 @@ class SlotManagement extends React.Component {
     }
 }
   render() {
-    const { navigate } = this.props.navigation;
+    slots  = this.props.slots;
     return (
       <View style={styles.container}>
-        <Icon.Button name="menu" onPress={() => navigate('DrawerOpen')}/>
+        <Icon.Button name="menu" onPress={() => this.props.navigation.openDrawer()}/>
         <Text style={styles.title}>{SlotManagement.navigationOptions.title}</Text>
 
         {this.renderEdit()}
 
         <Text>Your Parking Slots:</Text>
         <FlatList
-        data={this.props.slots}
+        data={slots}
         keyExtractor={slot => slot.name}
         renderItem={({item}) => <View style={styles.oneLine}><Text style={{ alignSelf: 'stretch'}}>{item.name}</Text><Icon.Button name="pencil" onPress={() => this.editSlot(item)}/><Icon.Button name="trash" onPress={() => this.deleteSlot(item)}/></View>}
       />
@@ -106,9 +106,9 @@ class SlotManagement extends React.Component {
       showEdit:false
     });
     this.props.saveSlot(this.props.serverUrl,this.props.login,this.props.password,this.props.id,this.props.name,this.props.desc,this.props.areaId,this.props.login);
-    this.props.loadOwnerSlots(this.props.serverUrl,this.props.login,this.props.password);
-
     this.resetCurrentSlot();
+    
+    this.props.loadOwnerSlots(this.props.serverUrl,this.props.login,this.props.password);
   }
   cancelEdit(){
     this.setState({
@@ -121,7 +121,10 @@ class SlotManagement extends React.Component {
     ",description="+this.props.desc+", areaId="+this.props.areaId);
     //TODO
 
+
+    this.props.loadOwnerSlots(this.props.serverUrl,this.props.login,this.props.password);
     this.resetCurrentSlot();
+
   }
 
   resetCurrentSlot(){
@@ -131,19 +134,22 @@ class SlotManagement extends React.Component {
     this.props.desc=null;
     this.props.areaId=null;
     this.props.ownerId=null;
+    this.props.storeSlot(null,null,null,null,null);
   }
   
-  editSlot(slot){
-    this.setState({
-      showEdit:true,
-    })
+  editSlot(slot){ 
     if(slot==null){
-        //new slot    
+        //new slot
+        console.log("creating new slot");   
+        this.resetCurrentSlot(); 
     }
     else{
       console.log("editing slot "+slot.name)
       this.props.getCurrentSlot(slot.name);
     } 
+    this.setState({
+      showEdit:true,
+    })
   }
 }
 
@@ -166,6 +172,7 @@ function mapDispatchToProps(dispatch) {
     storeSlot: (id, name, desc, areaId, owner) => {dispatch(storeSlot(id, name, desc, areaId, owner))},
     saveSlot: (url,login,pwd, id, name, desc, areaId, owner) => {dispatch(saveSlot(url,login,pwd, id, name, desc, areaId, owner))},
     loadOwnerSlots: (url,login,pwd) => {dispatch(loadOwnerSlots(url,login,pwd))},
+    deleteSlot: (url,login,pwd, id) => {dispatch(deleteSlot(url,login,pwd, id))},
     getCurrentSlot: (id) => {dispatch(getCurrentSlot(id))},
     loadAreas: (url,login,pwd) => {dispatch(loadAreas(url,login,pwd))}
   });

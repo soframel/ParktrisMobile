@@ -19,14 +19,13 @@ class ParktrisHome extends React.Component {
 
   
     render() {
-      const { navigate } = this.props.navigation;
       return (
         <View style={styles.container}>
-          <Icon.Button name="menu" onPress={() => navigate('DrawerOpen')}/>
+          <Icon.Button name="menu" onPress={() => this.props.navigation.openDrawer()}/>
           <Text style={styles.title}>Parktris</Text>
           <Text>Welcome to Parktris! </Text>
           <Button
-            onPress={() => navigate('SlotManagement')}
+            onPress={() => this.props.navigation.navigate('SlotManagement')}
             title="Manage Slots"
           />
         </View>

@@ -41,15 +41,15 @@ export function saveSlot(serverUrl, login, password, id, name, desc, areaId, own
         name: name,
         desc: desc,
         areaId: areaId,
-        owner: {
-          "login": owner
-        }
+        owner: owner
       }),
     })
     .then(
       (result) => {      
         if(result.status>=200 && result.status<300 && result.ok==true){   
-          console.log("saved slot OK ")
+          console.log("saved slot OK, result="+JSON.stringify(result));
+          uri=result.headers.map.location[0];
+          id=getIdFromUri(uri);
           dispatch(storeSlot(id, name, desc, areaId, owner));
           return result;
         }
@@ -61,6 +61,11 @@ export function saveSlot(serverUrl, login, password, id, name, desc, areaId, own
         console.error("error while saving slot: "+error);
       });
     }
+}
+
+export function getIdFromUri(uri){
+  var lastslashindex = uri.lastIndexOf('/');
+  return uri.substring(lastslashindex  + 1);
 }
 
 export function loadSlot(serverUrl, login, password, id){
@@ -125,6 +130,35 @@ export function loadOwnerSlots(serverUrl, login, password){
           console.log("loaded slots: "+slots.length);    
           dispatch(storeSlots(slots));
           console.log("stored owner slots");
+          return response;
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    }
+
+}
+
+
+export function deleteSlot(serverUrl, login, password, id){
+  return (dispatch,getState) => {
+    fetch(serverUrl+'/parkingSlot/'+id, {              
+      method: 'DELETE',
+      headers: {
+        'Authorization': buildToken(login, password)
+      }
+    })
+    .then(response => response.json())
+    .then((response) => {  
+          console.log("deleteSlot for owner "+login+", status="+response.status+", result="+JSON.stringify(response));
+          
+          if(response.status<200 && response.status>=300){
+            console.log("an error occured !");
+          }
+          else{
+          console.log("deleted slot");    
+          dispatch(loadOwnerSlots(serverUrl, login, password));
           return response;
         }
       })

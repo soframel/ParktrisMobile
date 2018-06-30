@@ -47,10 +47,9 @@ class ServerSettings extends React.Component {
   }
 
   render() {
-    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        <Icon.Button name="menu" onPress={() => navigate('DrawerOpen')}/>
+        <Icon.Button name="menu" onPress={() => this.props.navigation.openDrawer()}/>
         <Text style={styles.title}>Server Settings</Text>
         <Text>Parktris Mobile needs to know which ParkTris server to use in order to work. </Text>
         <Text>Server URL:</Text>
@@ -83,7 +82,7 @@ class ServerSettings extends React.Component {
         />        
         <Button
           title="Home"
-          onPress={() =>navigate('Home')
+          onPress={() =>this.props.navigation.navigate('Home')
           }
         />
       </View>
