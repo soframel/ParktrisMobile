@@ -2,14 +2,22 @@ import React from 'react';
 import { Provider, connect } from 'react-redux';
 import thunk from 'redux-thunk';
 import { combineReducers } from 'redux'
-import {AppNavigator} from './navigation';
+//import { addNavigationHelpers } from 'react-navigation';
+import {createDrawerNavigator} from 'react-navigation';
+import { createStore,applyMiddleware } from 'redux';
+
+//import {AppNavigator} from './navigation';
 import {serverSettings} from './store/serverSettingsStore';
 import {slotSettings} from './store/slotStore';
 import {areaSettings} from './store/areaStore';
-import { addNavigationHelpers } from 'react-navigation';
-import { createStore,applyMiddleware } from 'redux';
-import {loadUrl,loadLogin,loadPassword} from './actions/serverActions';
+//import {loadUrl,loadLogin,loadPassword} from './actions/serverActions';
+import ParktrisHome from './components/ParktrisHome';
+import ServerSettings from './components/ServerSettings';
+import SlotManagement from './components/SlotManagement';
+//import Menu from './components/Menu';
 
+// react-navigation integration with redux - removed
+/*
 //Reducer for navigator
 const initialState = AppNavigator.router.getStateForAction(AppNavigator.router.getActionForPathAndParams('Home'));
 const navReducer = (state = initialState, action) => {
@@ -44,6 +52,30 @@ const AppWithNavigationState = connect(mapStateToProps)(AppWithNavi);
 
 const store=createStore(appReducer,applyMiddleware(thunk));
 
+
+render below: removed <AppWithNavigationState />
+
+*/
+
+const appReducer = combineReducers({
+  serverSettings: serverSettings,
+  slotSettings: slotSettings,
+  areaSettings: areaSettings
+});
+const store=createStore(appReducer,applyMiddleware(thunk));
+
+const AppNavigator = createDrawerNavigator({
+  Home: {
+    screen: ParktrisHome
+  },
+  Server: {
+    screen: ServerSettings
+  },
+  SlotManagement: {
+    screen: SlotManagement
+  }
+});
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -51,9 +83,10 @@ export default class App extends React.Component {
   render() {
     return (
     <Provider store={store}>
-      <AppWithNavigationState />
+       <AppNavigator />
     </Provider> 
   );
   }
 }
+
 

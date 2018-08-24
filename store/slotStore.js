@@ -3,12 +3,12 @@ import {STORE_SLOT, STORE_SLOTS}from '../actions/actions';
 export const slotSettings = (state, action) => {
   switch (action.type) {    
     case STORE_SLOT:{
-        console.log("storing slot: "+action.slotName);
+        console.log("storing slot: "+JSON.stringify(action));
         return {
             slotId: action.slotId,
             slotName: action.slotName,
             slotDescription: action.slotDescription,
-            slotArea: action.slotArea,
+            slotAreaId: action.slotAreaId,
             slotOwner: action.slotOwner,
             slots: state.slots
           }
@@ -21,18 +21,18 @@ export const slotSettings = (state, action) => {
             slotId: state.slotId,
             slotName: state.slotName,
             slotDescription: state.slotDescription,
-            slotArea: state.slotArea,
+            slotAreaId: state.slotAreaId,
             slotOwner: state.slotOwner
           }
     }
     default:{
-        console.log("default: returning state "+state+", action="+action.type);
+        //console.log("default: returning state "+state+", action="+action.type);
         if(typeof state === "undefined"){
             return {
                 slotId: null,
                 slotName: "",
                 slotDescription: "",
-                slotArea: null,
+                slotAreaId: null,
                 slotOwner: null,
                 slots: null
               }
