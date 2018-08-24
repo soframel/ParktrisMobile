@@ -116,16 +116,7 @@ class SlotManagement extends React.Component {
     })
     this.resetCurrentSlot();
   }
-  deleteSlot(slot){
-    console.log("deleting slot with id="+this.props.id+", name="+this.props.name+
-    ",description="+this.props.desc+", areaId="+this.props.areaId);
-    //TODO
 
-
-    this.props.loadOwnerSlots(this.props.serverUrl,this.props.login,this.props.password);
-    this.resetCurrentSlot();
-
-  }
 
   resetCurrentSlot(){
     console.log("resetting current slot");
@@ -150,6 +141,20 @@ class SlotManagement extends React.Component {
     this.setState({
       showEdit:true,
     })
+  }
+
+  deleteSlot(slot){
+    if(slot==null){
+      console.log("deleting but no slot selected");    
+    }
+    else{
+      console.log("deleting slot with id="+slot.id+", name="+slot.name+
+      ",description="+slot.desc+", areaId="+slot.areaId);
+      this.props.deleteSlot(this.props.serverUrl, this.props.login, this.props.password, slot.id);
+
+      //refresh
+    this.props.loadOwnerSlots(this.props.serverUrl,this.props.login,this.props.password);
+    } 
   }
 }
 
