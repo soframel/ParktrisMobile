@@ -24,7 +24,7 @@ class ParktrisHome extends React.Component {
         <View style={styles.container}>
           <Icon.Button name="menu" onPress={() => navigate('DrawerOpen')}/>
           <Text style={styles.title}>Parktris</Text>
-          <Text>Welcome to Parktris! </Text>
+          <Text>Welcome to Parktris!</Text>
           <Button
             onPress={() => navigate('SlotManagement')}
             title="Manage Slots"
