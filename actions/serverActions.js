@@ -76,7 +76,12 @@ export function loadPassword() {
       AsyncStorage.getItem('@Parktris:password').then(
       (result) => {         
             currentPwd=result;
-            console.log("loaded password");
+            if(currentPwd!=null && currentPwd.length>0){
+              console.log("loaded password "+currentPwd.substring(0,1)+"...");
+            }
+            else{
+              console.log("loaded password but it is empty!");
+            }
      
           dispatch(storePassword(currentPwd));
           return result;
@@ -98,7 +103,12 @@ export function loadServerSettings(){
                   AsyncStorage.getItem('@Parktris:password').then(
                     (result3) => {         
                           pwd=result3;
-                          console.log("loaded password");
+                          if(pwd!=null && pwd.length>0){
+                            console.log("loaded password "+pwd.substring(0,1)+"...");
+                          }
+                          else{
+                            console.log("loaded password but it is empty!");
+                          }
                    
                         dispatch(storeAll(serverUrl, login, pwd));
                         return result3;
@@ -136,10 +146,14 @@ export function saveLogin(login) {
 
 export function savePassword(pwd) {
   return (dispatch,getState) => {
-      AsyncStorage.setItem('@Parktris:passord',pwd).then(
+      AsyncStorage.setItem('@Parktris:password',pwd).then(
       (result) => { 
-        
-            console.log("saved pwd ");
+        if(pwd!=null && pwd.length>0){
+          console.log("saved password "+pwd.substring(0,1)+"...");
+        }
+        else{
+          console.log("saved password but it is empty!");
+        }
      
           dispatch(storePassword(pwd));
           return result;

@@ -21,7 +21,13 @@ export const serverSettings = (state, action) => {
         };
     }
     case STORE_PWD:{
-        console.log("storing password ");
+        var pwd=action.password;
+        if(pwd!=null && pwd.length>0){
+            console.log("storing password "+pwd.substring(0,1)+"...");
+          }
+          else{
+            console.log("storing password but it is empty!");
+          }
         return {
             serverUrl: state.serverUrl,
             login: state.login,
@@ -30,7 +36,8 @@ export const serverSettings = (state, action) => {
         };
     }
     case STORE_ALL:{
-        console.log("storing all: serverURL="+action.serverUrl+", login="+action.login);
+        var shortPassword=(action.password!=null && action.password.length>0)?action.password.substring(0,1)+"...":"null";
+        console.log("storing all: serverURL="+action.serverUrl+", login="+action.login+", password="+shortPassword);
         return {
             serverUrl: action.serverUrl,
             login: action.login,
