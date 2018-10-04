@@ -2,3 +2,4 @@ node_modules/
 .expo/
 npm-debug.*
 run-avd.sh
+package-lock.json
