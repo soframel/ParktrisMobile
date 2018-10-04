@@ -93,6 +93,7 @@ class SlotManagement extends React.Component {
     this.props.storeSlot (this.props.id,name,this.props.desc,this.props.areaId,this.props.owner);
   }
   changeDescription(desc){    
+    console.log("changing slot description to "+desc);
     this.props.storeSlot (this.props.id,this.props.name,desc,this.props.areaId,this.props.owner);
   }
   changeArea(areaId){    
@@ -107,8 +108,6 @@ class SlotManagement extends React.Component {
     });
     this.props.saveSlot(this.props.serverUrl,this.props.login,this.props.password,this.props.id,this.props.name,this.props.desc,this.props.areaId,this.props.login);
     this.resetCurrentSlot();
-    
-    this.props.loadOwnerSlots(this.props.serverUrl,this.props.login,this.props.password);
   }
   cancelEdit(){
     this.setState({
@@ -135,8 +134,8 @@ class SlotManagement extends React.Component {
         this.resetCurrentSlot(); 
     }
     else{
-      console.log("editing slot "+slot.name)
-      this.props.getCurrentSlot(slot.name);
+      console.log("editing slot "+slot.id+", name="+slot.name)
+      this.props.getCurrentSlot(slot.id);
     } 
     this.setState({
       showEdit:true,

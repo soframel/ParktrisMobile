@@ -28,9 +28,10 @@ export function storeSlots(slots){
 
 export function saveSlot(serverUrl, login, password, id, name, desc, areaId, owner) {
   return (dispatch,getState) => {
+    //TODO: separate createSlot !
     console.log("saving slot id="+id+", name="+name+", desc="+desc+", areaId="+areaId+", owner="+owner);
     fetch(serverUrl+'/parkingSlot/'+id, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -48,6 +49,16 @@ export function saveSlot(serverUrl, login, password, id, name, desc, areaId, own
         if(result.status>=200 && result.status<300 && result.ok==true){   
           console.log("saved slot OK, result="+JSON.stringify(result));
           dispatch(storeSlot(id, name, desc, areaId, owner));
+          //also update slots list
+          const {slots}=getState().slotSettings;
+          for(i=0;i<slots.length;i++){
+            slot =slots[i];
+            slot.name=name;
+            slot.desc=desc;
+            slot.areaId=areaId;
+            slot.owner=owner;
+          }
+          dispatch(storeSlots(slots));
           return result;
         }
         else{
