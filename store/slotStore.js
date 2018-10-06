@@ -1,4 +1,4 @@
-import {STORE_SLOT, STORE_SLOTS}from '../actions/actions';
+import {STORE_SLOT, STORE_SLOTS,STORE_SLOT_AND_SLOTS}from '../actions/actions';
 
 export const slotSettings = (state, action) => {
   switch (action.type) {    
@@ -14,7 +14,7 @@ export const slotSettings = (state, action) => {
           }
     }
     case STORE_SLOTS:{
-        console.log("storing slots "+action.slots.length);
+        console.log("storing slots, length="+action.slots.length);
         return {
             slots: action.slots,
             //leave current slot unchanged
@@ -23,6 +23,17 @@ export const slotSettings = (state, action) => {
             slotDescription: state.slotDescription,
             slotAreaId: state.slotAreaId,
             slotOwner: state.slotOwner
+          }
+    }
+    case STORE_SLOT_AND_SLOTS:{
+        console.log("storing slot + slots, length="+action.slots.length);
+        return {
+            slots: action.slots,
+            slotId: action.slotId,
+            slotName: action.slotName,
+            slotDescription: action.slotDescription,
+            slotAreaId: action.slotAreaId,
+            slotOwner: action.slotOwner,
           }
     }
     default:{

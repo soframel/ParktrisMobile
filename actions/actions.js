@@ -11,5 +11,6 @@ export const STATUS_ERROR='ERROR'
 ///////// Slots Actions
 export const STORE_SLOT='STORE_SLOT'
 export const STORE_SLOTS='STORE_SLOTS'
+export const STORE_SLOT_AND_SLOTS='STORE_SLOT_AND_SLOTS'
 //////// Areas
 export const STORE_AREAS='STORE_AREAS'

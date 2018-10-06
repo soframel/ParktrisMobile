@@ -107,7 +107,8 @@ class SlotManagement extends React.Component {
       showEdit:false
     });
     this.props.saveSlot(this.props.serverUrl,this.props.login,this.props.password,this.props.id,this.props.name,this.props.desc,this.props.areaId,this.props.login);
-    this.resetCurrentSlot();
+    //this.resetCurrentSlot();
+    //this.forceUpdate();
   }
   cancelEdit(){
     this.setState({
@@ -178,7 +179,7 @@ function mapDispatchToProps(dispatch) {
     loadOwnerSlots: (url,login,pwd) => {dispatch(loadOwnerSlots(url,login,pwd))},
     deleteSlot: (url,login,pwd, id) => {dispatch(deleteSlot(url,login,pwd, id))},
     getCurrentSlot: (id) => {dispatch(getCurrentSlot(id))},
-    loadAreas: (url,login,pwd) => {dispatch(loadAreas(url,login,pwd))}
+    loadAreas: (url,login,pwd) => {dispatch(loadAreas(url,login,pwd))},
   });
 }
 
