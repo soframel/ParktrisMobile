@@ -89,7 +89,7 @@ export function saveSlot(serverUrl, login, password, id, name, desc, areaId, own
     //TODO: separate createSlot !
     console.log("saving slot id="+id+", name="+name+", desc="+desc+", areaId="+areaId+", owner="+owner);
     if(id){ // Update slot
-      fetch(serverUrl+'/parkingSlot/'+id, {
+      fetch(serverUrl+'/slots/'+id, {
         method: 'PUT',
         headers: {
           Accept: 'application/json',
@@ -122,7 +122,7 @@ export function saveSlot(serverUrl, login, password, id, name, desc, areaId, own
     }
     else{
       //No ID=creating new slot
-      fetch(serverUrl+'/parkingSlot', {
+      fetch(serverUrl+'/slots', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -140,7 +140,6 @@ export function saveSlot(serverUrl, login, password, id, name, desc, areaId, own
       .then((result) => {      
             console.log("created slot OK, result="+JSON.stringify(result));
             slot=result;  
-            updateSlotId(slot);
             console.log("returned slot: "+JSON.stringify(slot));
             const {slots}=getState().slotSettings;
             var newSlots=updateSlotsList(slot.id, slot.name, slot.desc, slot.areaId, slot.owner, slots);
@@ -154,20 +153,10 @@ export function saveSlot(serverUrl, login, password, id, name, desc, areaId, own
   }
 }
 
-export function getIdFromUri(uri){
-  var lastslashindex = uri.lastIndexOf('/');
-  return uri.substring(lastslashindex  + 1);
-}
-
-export function updateSlotId(slot){
-  uri=slot._links.self.href;
-  id=getIdFromUri(uri);
-  slot.id=id;
-}
 
 export function loadSlot(serverUrl, login, password, id){
   return (dispatch,getState) => {
-    fetch(serverUrl+'parkingSlot/'+id, {
+    fetch(serverUrl+'slots/'+id, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -177,7 +166,7 @@ export function loadSlot(serverUrl, login, password, id){
     })
     .then(
       (result) => {   
-          slot=result.json()._embedded.parkingSlot;      
+          slot=result;      
           dispatch(storeSlot(id, slot.name, slot.desc, slot.areaId, slot.owner));
           return result;
       })
@@ -206,7 +195,7 @@ export function getCurrentSlot(id){
 
 export function loadOwnerSlots(serverUrl, login, password){
   return (dispatch,getState) => {
-    fetch(serverUrl+'/parkingSlot/search/findAllByOwner?owner='+login, {              
+    fetch(serverUrl+'/slots?owner='+login, {              
       method: 'GET',
       headers: {
         'Authorization': buildToken(login, password)
@@ -220,15 +209,10 @@ export function loadOwnerSlots(serverUrl, login, password){
             console.log("an error occured !");
           }
           else{
-            slots=response._embedded.parkingSlot;  
+            slots=response;  
             console.log("loaded slots: "+slots.length);    
 
-            var newSlots = slots.map(function(s) { 
-              updateSlotId(s);
-              return s;
-            });
-
-            dispatch(storeSlots(newSlots));
+            dispatch(storeSlots(slots));
             console.log("stored owner slots");
             return response;
           }
@@ -244,7 +228,7 @@ export function loadOwnerSlots(serverUrl, login, password){
 export function deleteSlot(serverUrl, login, password, id){
   return (dispatch,getState) => {
     console.log("deleteSlot for owner "+login+", id="+id);
-    fetch(serverUrl+'/parkingSlot/'+id, {              
+    fetch(serverUrl+'/slots/'+id, {              
       method: 'DELETE',
       headers: {
         'Authorization': buildToken(login, password)

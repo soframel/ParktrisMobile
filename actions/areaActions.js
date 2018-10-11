@@ -17,7 +17,7 @@ export function storeAreas(areas){
 
 export function loadAreas(serverUrl, login, password){
   return (dispatch,getState) => {
-    fetch(serverUrl+'/parkingArea', {              
+    fetch(serverUrl+'/areas', {              
       method: 'GET',
       headers: {
         'Authorization': buildToken(login, password)
@@ -31,13 +31,13 @@ export function loadAreas(serverUrl, login, password){
             console.log("an error occured !");
           }
           else{
-          areas=response._embedded.parkingArea;  
+          areas=response;  
           console.log("loaded areas: "+areas.length); 
-          areas.map((area) => {
-            uri=area._links.self.href;
-            var lastslashindex = uri.lastIndexOf('/');
-            area.id=uri.substring(lastslashindex  + 1);
-          });   
+          // areas.map((area) => {
+          //   uri=area._links.self.href;
+          //   var lastslashindex = uri.lastIndexOf('/');
+          //   area.id=uri.substring(lastslashindex  + 1);
+          // });   
           dispatch(storeAreas(areas));
           console.log("stored areas: "+JSON.stringify(areas));
           return response;
