@@ -84,6 +84,11 @@ class SlotManagement extends React.Component {
             title="Add Slot "
             onPress={() => this.editSlot(null)}
         />
+        <Button
+          title="Home"
+          onPress={() =>this.props.navigation.navigate('Home')
+          }
+        />
       </View>      
     );
 
@@ -107,8 +112,6 @@ class SlotManagement extends React.Component {
       showEdit:false
     });
     this.props.saveSlot(this.props.serverUrl,this.props.login,this.props.password,this.props.id,this.props.name,this.props.desc,this.props.areaId,this.props.login);
-    //this.resetCurrentSlot();
-    //this.forceUpdate();
   }
   cancelEdit(){
     this.setState({
@@ -151,9 +154,6 @@ class SlotManagement extends React.Component {
       console.log("deleting slot with id="+slot.id+", name="+slot.name+
       ",description="+slot.desc+", areaId="+slot.areaId);
       this.props.deleteSlot(this.props.serverUrl,this.props.login,this.props.password, slot.id);
-
-      //refresh
-    //this.props.loadOwnerSlots(this.props.serverUrl,this.props.login,this.props.password);
     } 
   }
 }

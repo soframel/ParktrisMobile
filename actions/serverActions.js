@@ -165,7 +165,7 @@ export function checkConnection(serverUrl, login, password) {
   return (dispatch,getState) => {
     console.log("checking connection to server " + serverUrl + " with login " + login);
     //TODO: add timeout when it is supported by API !
-    return fetch(serverUrl + '/parkingArea', {
+    return fetch(serverUrl + '/areas', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
