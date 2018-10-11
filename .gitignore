@@ -3,3 +3,7 @@ node_modules/
 npm-debug.*
 run-avd.sh
 package-lock.json
+.idea/workspace.xml
+.idea/ParktrisMobile.iml
+.idea/modules.xml
+.idea/vcs.xml

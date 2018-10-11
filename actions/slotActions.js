@@ -243,22 +243,26 @@ export function loadOwnerSlots(serverUrl, login, password){
 
 export function deleteSlot(serverUrl, login, password, id){
   return (dispatch,getState) => {
+    console.log("deleteSlot for owner "+login+", id="+id);
     fetch(serverUrl+'/parkingSlot/'+id, {              
       method: 'DELETE',
       headers: {
         'Authorization': buildToken(login, password)
       }
     })
-    .then(response => response.json())
     .then((response) => {  
-          console.log("deleteSlot for owner "+login+", status="+response.status+", result="+JSON.stringify(response));
+          console.log("deleteSlot result for owner "+login+", status="+response.status);
           
           if(response.status<200 && response.status>=300){
             console.log("an error occured !");
           }
           else{
           console.log("deleted slot");    
-          dispatch(loadOwnerSlots(serverUrl, login, password));
+          //dispatch(loadOwnerSlots(serverUrl, login, password));
+          const {slots}=getState().slotSettings;
+          const newSlots = slots.filter(s => s.id !=id);
+          dispatch(storeSlots(newSlots));
+
           return response;
         }
       })
