@@ -195,6 +195,7 @@ export function getCurrentSlot(id){
 
 export function loadOwnerSlots(serverUrl, login, password){
   return (dispatch,getState) => {
+    console.log("Calling loadOwnerSlots for owner "+login);
     fetch(serverUrl+'/slots?owner='+login, {              
       method: 'GET',
       headers: {

@@ -168,7 +168,7 @@ const mapStateToProps = state => ({
   areaId: state.slotSettings.slotAreaId,
   ownerId: state.slotSettings.slotOwnerId,
   slots: state.slotSettings.slots,
-  areas: state.areaSettings.areas
+  areas: state.areaStore.areas
 })
 
 function mapDispatchToProps(dispatch) {

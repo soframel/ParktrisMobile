@@ -8,16 +8,21 @@ import {createDrawerNavigator} from 'react-navigation';
 import { createStore,applyMiddleware } from 'redux';
 import {serverSettings} from './store/serverSettingsStore';
 import {slotSettings} from './store/slotStore';
-import {areaSettings} from './store/areaStore';
+import {areaStore} from './store/areaStore';
+import {freeSlotDeclarationStore} from './store/freeSlotDeclarationStore';
+import {userStore} from './store/userStore';
 import ParktrisHome from './components/ParktrisHome';
 import ServerSettings from './components/ServerSettings';
 import SlotManagement from './components/SlotManagement';
+import FreeSlotDeclaration from './components/FreeSlotDeclaration';
 
 
 const appReducer = combineReducers({
   serverSettings: serverSettings,
   slotSettings: slotSettings,
-  areaSettings: areaSettings
+  areaStore: areaStore,
+  freeSlotDeclarationStore: freeSlotDeclarationStore,
+  userStore: userStore,
 });
 const store=createStore(appReducer,applyMiddleware(thunk));
 
@@ -30,6 +35,9 @@ const AppNavigator = createDrawerNavigator({
   },
   SlotManagement: {
     screen: SlotManagement
+  },
+  FreeSlotDeclaration: {
+    screen: FreeSlotDeclaration
   }
 });
 

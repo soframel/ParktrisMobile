@@ -25,6 +25,10 @@ class ParktrisHome extends React.Component {
           <Text style={styles.title}>Parktris</Text>
           <Text>Welcome to Parktris!</Text>
           <Button
+            onPress={() => this.props.navigation.navigate('FreeSlotDeclaration')}
+            title="I have a free slot !"
+          />
+          <Button
             onPress={() => this.props.navigation.navigate('SlotManagement')}
             title="Manage Slots"
           />

@@ -1,6 +1,6 @@
 import {STORE_AREAS}from '../actions/actions';
 
-export const areaSettings = (state, action) => {
+export const areaStore = (state, action) => {
   switch (action.type) {    
     case STORE_AREAS:{
         console.log("storing areas "+action.areas.length);
@@ -22,4 +22,4 @@ export const areaSettings = (state, action) => {
   }
 }
 
-export default areaSettings;
+export default areaStore;

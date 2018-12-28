@@ -14,3 +14,9 @@ export const STORE_SLOTS='STORE_SLOTS'
 export const STORE_SLOT_AND_SLOTS='STORE_SLOT_AND_SLOTS'
 //////// Areas
 export const STORE_AREAS='STORE_AREAS'
+/////// Free Slot Declarations Actions
+export const STORE_DECL="STORE_DECL"
+export const STORE_DECLS="STORE_DECLS"
+export const STORE_DECL_AND_DECLS="STORE_DECL_AND_DECLS"
+//////// User Actions
+export const STORE_WANTSLOT_USERS="STORE_WANTSLOT_USERS"
