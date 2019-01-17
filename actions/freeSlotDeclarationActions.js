@@ -99,7 +99,7 @@ function updateDeclarationsList(id, owner,slotId, startDate, endDate, preferedTe
       decl=decls[i];           
       var newDecl={id: decl.id};
       if(decl.id==id){
-        newDecl.name=name;
+        newDecl.id=id;
         newDecl.owner=owner;
         newDecl.slotId=slotId;
         newDecl.startDate=startDate;
@@ -108,7 +108,7 @@ function updateDeclarationsList(id, owner,slotId, startDate, endDate, preferedTe
         found=true;
       }
       else{
-        newDecl.name=decl.name;
+        newDecl.id=decl.id;
         newDecl.owner=decl.owner;
         newDecl.slotId=decl.slotId;
         newDecl.startDate=decl.startDate;
@@ -121,7 +121,7 @@ function updateDeclarationsList(id, owner,slotId, startDate, endDate, preferedTe
     //if not found: new decl to be added
     if(!found){
       var newDecl={id: id};
-      newDecl.name=name;
+      newDecl.id=id;
       newDecl.owner=owner;
       newDecl.slotId=slotId;
       newDecl.startDate=startDate;
