@@ -25,14 +25,18 @@ class FreeSlotDeclaration extends React.Component {
   }
 
   componentDidMount() {
-    console.log("FreeSlotDeclaration");
+    console.log("FreeSlotDeclaration componentDidMount");
     this.props.loadUsersWantSlot(this.props.serverUrl, this.props.login, this.props.password);
+    console.log("loaded if user wants slot")
     this.props.loadOwnerSlots(this.props.serverUrl, this.props.login, this.props.password);
+    console.log("loaded owner slots")
     this.props.loadOwnerDecls(this.props.serverUrl, this.props.login, this.props.password);
+    console.log("loaded owner declarations")
   }
 
 
   renderEdit=function(){
+    console.log("renderEdit")
     if(this.state.showEdit){
       //TODO: add list of potential tenants
         return(
@@ -72,6 +76,7 @@ class FreeSlotDeclaration extends React.Component {
 /** TODO: show only future declarations  */
 
   render() {
+    console.log("render, decls="+this.props.decls)
     decls  = this.props.decls;
     return (
       <View style={styles.container}>
@@ -95,8 +100,8 @@ class FreeSlotDeclaration extends React.Component {
           onPress={() =>this.props.navigation.navigate('Home')
           }
         />
-      </View>      
-    );
+      </View> 
+    );     
 
   }
 
@@ -113,6 +118,7 @@ class FreeSlotDeclaration extends React.Component {
     this.props.storeDecl (this.props.id, this.props.owner, slotId, this.props.startDate, this.props.endDate, this.props.preferedTenants);
   }
   saveDecl(){
+    console.log("saving declaration")
     if(this.props.slotId==null){
       this.props.slotId=this.props.slots[0].slotId
     }
@@ -124,6 +130,7 @@ class FreeSlotDeclaration extends React.Component {
     this.props.saveDecl(this.props.serverUrl,this.props.login,this.props.password,this.props.id, this.props.owner, this.props.slotId, this.props.startDate, this.props.endDate, this.props.preferedTenants);
   }
   cancelEdit(){
+    console.log("cancelEdit")
     this.setState({
       showEdit:false,
     })
@@ -142,6 +149,7 @@ class FreeSlotDeclaration extends React.Component {
   }
   
   editDecl(decl){ 
+    console.log("editing current decl")
     if(decl==null){
         //new decl
         console.log("creating new decl");   

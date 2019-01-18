@@ -204,7 +204,7 @@ export function loadOwnerSlots(serverUrl, login, password){
     })
     .then(response => response.json())
     .then((response) => {  
-          console.log("loadOwnerSlots for owner "+login+", status="+response.status+", result="+JSON.stringify(response));
+          console.log("loadOwnerSlots for owner "+login+", result="+JSON.stringify(response));
           
           if(response.status<200 && response.status>=300){
             console.log("an error occured !");

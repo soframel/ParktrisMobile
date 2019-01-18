@@ -73,7 +73,7 @@ export function saveDecl(serverUrl, login, password, id, slotId, startDate, endD
             console.log("saved declaration OK, result="+JSON.stringify(result));
             decl=result;
             const {decls}=getState().freeSlotDeclarationStore;
-            var newDecls=updateDeclarationsList(decl.id, login,slotId, startDate, endDate, preferedTenants, decls);
+            var newDecls=updateDeclarationsList(id, login,slotId, startDate, endDate, preferedTenants, decls);
             dispatch(storeDeclAndDecls(id, login,slotId, startDate, endDate, preferedTenants, newDecls));
             return result;
           }
