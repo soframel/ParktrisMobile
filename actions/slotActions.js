@@ -48,8 +48,9 @@ function updateSlotsList(id, name, desc, areaId, owner, slots){
     var found=false;
     for(i=0;i<slots.length;i++){
       slot=slots[i];           
-      var newSlot={id: slot.id};
+      var newSlot=new Object;
       if(slot.id==id){
+        newSlot.id=id;
         newSlot.name=name;
         newSlot.desc=desc;
         newSlot.areaId=areaId;
@@ -57,6 +58,7 @@ function updateSlotsList(id, name, desc, areaId, owner, slots){
         found=true;
       }
       else{
+        newSlot.id=slot.id;
         newSlot.name=slot.name;
         newSlot.desc=slot.desc;
         newSlot.areaId=slot.areaId;
@@ -67,7 +69,7 @@ function updateSlotsList(id, name, desc, areaId, owner, slots){
     }
     //if not found: new slot to be added
     if(!found){
-      var newSlot={id: slot.id};
+      var newSlot={id: id};
       newSlot.name=name;
       newSlot.desc=desc;
       newSlot.areaId=areaId;

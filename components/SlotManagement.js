@@ -103,6 +103,7 @@ class SlotManagement extends React.Component {
   }
   changeArea(areaId){    
     this.props.storeSlot (this.props.id,this.props.name,this.props.desc,areaId,this.props.owner);
+    //why is this needed?
     this.props.areaId=areaId;
   }
   saveSlot(){
@@ -123,11 +124,6 @@ class SlotManagement extends React.Component {
 
   resetCurrentSlot(){
     console.log("resetting current slot");
-    this.props.id=null;
-    this.props.name=null;
-    this.props.desc=null;
-    this.props.areaId=null;
-    this.props.ownerId=null;
     this.props.storeSlot(null,null,null,null,null);
   }
   
@@ -136,6 +132,15 @@ class SlotManagement extends React.Component {
         //new slot
         console.log("creating new slot");   
         this.resetCurrentSlot(); 
+        //select first entry for area
+        if(this.props.areas.length>0){
+          //get first area
+          var firstArea=this.props.areas[Object.keys(this.props.areas)[0]]
+          this.props.storeSlot(null,null,null,firstArea['id'],null);
+        }
+        else{
+          console.log("no areas found")
+        }
     }
     else{
       console.log("editing slot "+slot.id+", name="+slot.name)
