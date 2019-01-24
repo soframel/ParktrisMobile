@@ -68,18 +68,14 @@ export function saveDecl(serverUrl, login, password, id, slotId, startDate, endD
           preferedTenants: preferedTenants
         }),
       })
-      .then((result) => {      
-          if(result.status>=200 && result.status<300 && result.ok==true){   
+      .then(response => response.json())
+      .then((result) => {            
             console.log("saved declaration OK, result="+JSON.stringify(result));
             decl=result;
             const {decls}=getState().freeSlotDeclarationStore;
-            var newDecls=updateDeclarationsList(id, login,slotId, startDate, endDate, preferedTenants, decls);
-            dispatch(storeDeclAndDecls(id, login,slotId, startDate, endDate, preferedTenants, newDecls));
+            var newDecls=updateDeclarationsList(decl.id, login,slotId, startDate, endDate, preferedTenants, decls);
+            dispatch(storeDeclAndDecls(decl.id, login,slotId, startDate, endDate, preferedTenants, newDecls));
             return result;
-          }
-          else{
-            console.log("an error occured while saving declaration: "+JSON.stringify(result));
-          }
         })
         .catch((error) => {
           console.error("error while saving declaration: "+error);
@@ -133,7 +129,7 @@ function updateDeclarationsList(id, owner,slotId, startDate, endDate, preferedTe
     message="updating decls to [";    
     for(i=0;i<newDecls.length;i++){
       decl= newDecls[i];
-      message=message+"{id="+decl.id+"onwer="+decl.owner+", slotId="+decl.slotId+", startDate="+decl.startDate+", endDate="+decl.endDate+", preferedTenants="+decl.preferedTenants+"}";
+      message=message+"{id="+decl.id+", owner="+decl.owner+", slotId="+decl.slotId+", startDate="+decl.startDate+", endDate="+decl.endDate+", preferedTenants="+decl.preferedTenants+"}";
     } 
     console.log(message+"]");
     return newDecls;
@@ -151,6 +147,7 @@ export function loadDecl(serverUrl, login, password, id){
         'Authorization': buildToken(login, password)
       }
     })
+    .then(response => response.json())
     .then(
       (result) => {   
           decl=result;      

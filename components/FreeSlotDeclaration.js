@@ -76,7 +76,7 @@ class FreeSlotDeclaration extends React.Component {
 /** TODO: show only future declarations  */
 
   render() {
-    console.log("render, decls="+this.props.decls)
+    console.log("render, decls="+JSON.stringify(this.props.decls))
     decls  = this.props.decls;
     return (
       <View style={styles.container}>
@@ -102,7 +102,10 @@ class FreeSlotDeclaration extends React.Component {
         />
       </View> 
     );     
+  }
 
+  getCurrentDate(){
+    return moment().format('YYYY-MM-DD');
   }
 
   changeStartDate(startDate){   
@@ -140,12 +143,13 @@ class FreeSlotDeclaration extends React.Component {
 
   resetCurrentDecl(){
     console.log("resetting current decl");
-    this.props.id=null;
+    /*this.props.id=null;
     this.props.owner=null;
     this.props.startDate=moment();
     this.props.endDate=moment();
-    this.props.preferedTenants=null;
-    this.props.storeDecl(null,null,null,null,null,null);
+    this.props.preferedTenants=null;*/
+    var date=this.getCurrentDate();
+    this.props.storeDecl(null,null,null,date,date,null);
   }
   
   editDecl(decl){ 
@@ -154,6 +158,16 @@ class FreeSlotDeclaration extends React.Component {
         //new decl
         console.log("creating new decl");   
         this.resetCurrentDecl(); 
+
+        var firstSlot=new Object();
+        if(this.props.slots.length>0){
+          firstSlot=this.props.slots[Object.keys(this.props.slots)[0]]
+        }
+        else{
+          console.log("no slot found")
+        }
+        var date=this.getCurrentDate();
+        this.props.storeDecl(null,null,firstSlot['id'],date,date,null);
     }
     else{
       console.log("editing decl "+decl.id+", startDate="+decl.startDate)

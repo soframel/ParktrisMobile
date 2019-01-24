@@ -133,14 +133,15 @@ class SlotManagement extends React.Component {
         console.log("creating new slot");   
         this.resetCurrentSlot(); 
         //select first entry for area
+        var firstArea=new Object();
         if(this.props.areas.length>0){
           //get first area
-          var firstArea=this.props.areas[Object.keys(this.props.areas)[0]]
-          this.props.storeSlot(null,null,null,firstArea['id'],null);
+          firstArea=this.props.areas[Object.keys(this.props.areas)[0]]         
         }
         else{
           console.log("no areas found")
         }
+        this.props.storeSlot(null,null,null,firstArea['id'],null);
     }
     else{
       console.log("editing slot "+slot.id+", name="+slot.name)
