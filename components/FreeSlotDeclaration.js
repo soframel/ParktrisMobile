@@ -61,11 +61,15 @@ class FreeSlotDeclaration extends React.Component {
                     date={this.props.endDate}/>  
                 <Text>Do you have prefered tenants?</Text>                      
 
-                <Button
+                <Icon.Button
+                  name="save"
+                  style={styles.iconButton}
                   title="Save"
                   onPress={() => this.saveDecl()}
                   />
-              <Button
+              <Icon.Button
+                  name="cross"
+                  style={styles.iconButton}
                   title="Cancel"
                   onPress={() => this.cancelEdit()}
                   />
@@ -80,22 +84,26 @@ class FreeSlotDeclaration extends React.Component {
     decls  = this.props.decls;
     return (
       <View style={styles.container}>
-        <Icon.Button name="menu" onPress={() => this.props.navigation.openDrawer()}/>
+        <Icon.Button name="menu"  style={styles.iconButton} onPress={() => this.props.navigation.openDrawer()}/>
         <Text style={styles.title}>{FreeSlotDeclaration.navigationOptions.title}</Text>
 
         {this.renderEdit()}
 
         <Text>Your Free Slot Declarations:</Text>        
+        <Icon.Button name="plus"
+            style={styles.iconButton}
+            title="Add"
+            onPress={() => this.editDecl(null)}
+        />
         <FlatList
         data={decls}
         keyExtractor={decl => decl.id}
-        renderItem={({item}) => <View style={styles.oneLine}><Text style={{ alignSelf: 'stretch'}}>{item.startDate} to {item.endDate}</Text><Icon.Button name="pencil" onPress={() => this.editDecl(item)}/><Icon.Button name="trash" onPress={() => this.deleteDecl(item)}/></View>}
+        renderItem={({item}) => <View style={styles.oneLine}><Text style={{ alignSelf: 'stretch'}}>{item.startDate} to {item.endDate}</Text><Icon.Button name="pencil" onPress={() => this.editDecl(item)} style={styles.iconButton} /><Icon.Button name="trash"  style={styles.iconButton} onPress={() => this.deleteDecl(item)}/></View>}
       />
-        <Button
-            title="Add Declaration"
-            onPress={() => this.editDecl(null)}
-        />
-        <Button
+        
+        <Icon.Button
+        name="home"
+        style={styles.iconButton}
           title="Home"
           onPress={() =>this.props.navigation.navigate('Home')
           }

@@ -49,7 +49,7 @@ class ServerSettings extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Icon.Button name="menu" onPress={() => this.props.navigation.openDrawer()}/>
+        <Icon.Button name="menu"  style={styles.iconButton} onPress={() => this.props.navigation.openDrawer()}/>
         <Text style={styles.title}>Server Settings</Text>
         <Text>Parktris Mobile needs to know which ParkTris server to use in order to work. </Text>
         <Text>Server URL:</Text>
@@ -72,16 +72,21 @@ class ServerSettings extends React.Component {
             onChangeText={this.changePassword.bind(this)}
         />        
         <Button
+          color="purple"
           title="Check connection"
           onPress={this.checkConnection.bind(this)}
         />
           <Text>{(this.props.connectionStatus !== 'undefined' && this.props.connectionStatus!==STATUS_UNKNOWN)?this.props.connectionStatus:""}</Text>           
-        <Button
+        <Icon.Button
+        style={styles.iconButton}
+        name="save"
           title="Save"
           onPress={this.saveSettings.bind(this)}
         />        
-        <Button
+        <Icon.Button
+          name="home"
           title="Home"
+          style={styles.iconButton}
           onPress={() =>this.props.navigation.navigate('Home')
           }
         />

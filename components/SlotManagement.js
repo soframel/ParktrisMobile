@@ -53,11 +53,15 @@ class SlotManagement extends React.Component {
                      return (<Picker.Item label={area.name} value={area.id} key={area.id} />) 
                     })}
                 </Picker>                             
-                <Button
+                <Icon.Button
                   title="Save"
+                  style={styles.iconButton}
+                  name="save"
                   onPress={() => this.saveSlot()}
                   />
-              <Button
+              <Icon.Button
+                  name="cross"
+                  style={styles.iconButton}
                   title="Cancel"
                   onPress={() => this.cancelEdit()}
                   />
@@ -69,23 +73,27 @@ class SlotManagement extends React.Component {
     slots  = this.props.slots;
     return (
       <View style={styles.container}>
-        <Icon.Button name="menu" onPress={() => this.props.navigation.openDrawer()}/>
+        <Icon.Button name="menu"  style={styles.iconButton} onPress={() => this.props.navigation.openDrawer()}/>
         <Text style={styles.title}>{SlotManagement.navigationOptions.title}</Text>
 
         {this.renderEdit()}
 
         <Text>Your Parking Slots:</Text>
+        <Icon.Button
+            title="Add Slot "
+            name="plus"
+            style={styles.iconButton}
+            onPress={() => this.editSlot(null)}
+        />
         <FlatList
         data={slots}
         keyExtractor={slot => slot.name}
-        renderItem={({item}) => <View style={styles.oneLine}><Text style={{ alignSelf: 'stretch'}}>{item.name}</Text><Icon.Button name="pencil" onPress={() => this.editSlot(item)}/><Icon.Button name="trash" onPress={() => this.deleteSlot(item)}/></View>}
+        renderItem={({item}) => <View style={styles.oneLine}><Text style={{ alignSelf: 'stretch'}}>{item.name}</Text><Icon.Button name="pencil" style={styles.iconButton} onPress={() => this.editSlot(item)}/><Icon.Button name="trash" style={styles.iconButton} onPress={() => this.deleteSlot(item)}/></View>}
       />
-        <Button
-            title="Add Slot "
-            onPress={() => this.editSlot(null)}
-        />
-        <Button
+      
+        <Icon.Button
           title="Home"
+          style={styles.iconButton}
           onPress={() =>this.props.navigation.navigate('Home')
           }
         />

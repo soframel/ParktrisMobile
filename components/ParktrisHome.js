@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View,Button } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import styles from '../styles.js';
 import { connect } from 'react-redux';
@@ -20,18 +20,14 @@ class ParktrisHome extends React.Component {
   
     render() {
       return (
-        <View style={styles.container}>
-          <Icon.Button name="menu" onPress={() => this.props.navigation.openDrawer()}/>
+        <View style={styles.container}>       
+          <Icon.Button name="menu"  style={styles.iconButton} onPress={() => this.props.navigation.openDrawer()}/>
           <Text style={styles.title}>Parktris</Text>
-          <Text>Welcome to Parktris!</Text>
-          <Button
+          <Text>Welcome to Parktris! </Text>
+          <Button color="purple"
             onPress={() => this.props.navigation.navigate('FreeSlotDeclaration')}
             title="I have a free slot !"
-          />
-          <Button
-            onPress={() => this.props.navigation.navigate('SlotManagement')}
-            title="Manage Slots"
-          />
+          />          
         </View>
       );
     }

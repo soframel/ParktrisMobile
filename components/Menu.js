@@ -8,7 +8,7 @@ export class Menu extends React.Component {
     const { navigate } = this.props.navigation;
     return (
         <View style={styles.container}>
-          <Icon.Button name="menu" onPress={() => navigate('DrawerOpen')}/>
+          <Icon.Button name="menu"  style={styles.iconButton} onPress={() => navigate('DrawerOpen')}/>
           <Text style={styles.title}>Parktris</Text>
         </View>
     );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-
+import styles from './styles.js';
 import { Provider, connect } from 'react-redux';
 import thunk from 'redux-thunk';
 import { combineReducers } from 'redux'
@@ -15,7 +15,6 @@ import ParktrisHome from './components/ParktrisHome';
 import ServerSettings from './components/ServerSettings';
 import SlotManagement from './components/SlotManagement';
 import FreeSlotDeclaration from './components/FreeSlotDeclaration';
-
 
 const appReducer = combineReducers({
   serverSettings: serverSettings,
@@ -48,13 +47,13 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-      <AppNavigator />
-   </Provider> 
+      <AppNavigator color='purple'/>
+      </Provider> 
     );
   }
 }
 
-const styles = StyleSheet.create({
+/*const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -62,3 +61,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+*/

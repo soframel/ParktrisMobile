@@ -6,8 +6,8 @@ export default StyleSheet.create({
       flexDirection: 'column',
       backgroundColor: '#fff',
       alignItems: 'flex-start',
-      paddingTop: 20,
-      padding: 10
+
+      padding: 20,
     },
     title:{
       fontSize: 24,
@@ -22,5 +22,12 @@ export default StyleSheet.create({
     oneLine:{
       flex: 1,
       flexDirection: 'row'
+    },
+  
+    iconButton: {
+      backgroundColor: 'purple'
+    },
+    button: {
+      color: 'purple'
     }
   });
